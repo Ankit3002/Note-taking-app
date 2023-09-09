@@ -10,50 +10,93 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.textInputServiceFactory
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MyApplicationTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-//                    Greeting("Android")
-                    screen_second()
-                }
+
+/*
+ *  create screen of a particular note ...
+ */
+
+//class edit_note : ComponentActivity() {
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            MyApplicationTheme {
+//                // A surface container using the 'background' color from the theme
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colors.background
+//                ) {
+//                    notes_edit_screen();
+//                }
+//            }
+//        }
+//    }
+//}
+
+
+// Main Function ....
+
+@Composable
+fun notes_edit_screen()
+{
+    Column(modifier = Modifier.fillMaxSize())
+    {
+        // back and menu button ...
+        Row(modifier =  Modifier.fillMaxWidth()) {
+
+            // add the back button over here ...
+            IconButton(
+                onClick = {
+                    // Handle button click here
+                },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                // You can use an ImageVector or a Drawable
+                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_ios_24), contentDescription = null)
+
+            }
+
+            IconButton(
+                onClick = {
+                    // Handle button click here
+                },
+                modifier = Modifier.padding(16.dp)
+            ) {
+
+                // add the menu button over here ...
+                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_24), contentDescription = null)
             }
         }
+
+
+        // icon button row ends over here...
+        // add the input text field for heading ...
+        TextFieldOutline()
+
+        // add the blank field for content...
+        TextFieldOutline()
+        // add the bottom  navigation view...
+        RoundedCornerBox()
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        Greeting("Android")
-    }
-}
 
-// heading over here...
+
+
+
+// Text field...
 @Composable
-fun InputTextExample() {
+fun TextFieldOutline() {
     // Create a state to hold the text entered by the user
     val textState = remember { mutableStateOf("") }
 
@@ -88,6 +131,7 @@ fun RoundedCornerBox() {
             )
     ) {
 
+        // camera, pencil , attach button over here ...
         Row()
         {
             // add the image button over here ...
@@ -145,48 +189,3 @@ fun RoundedCornerBox() {
     }
 }
 
-
-
-@Composable
-@Preview(showBackground =  true)
-fun screen_second()
-{
-    Column(modifier = Modifier.fillMaxSize())
-    {
-        Row(modifier =  Modifier.fillMaxWidth()) {
-
-            // add the back button over here ...
-            IconButton(
-                onClick = {
-                    // Handle button click here
-                },
-                modifier = Modifier.padding(16.dp)
-            ) {
-                // You can use an ImageVector or a Drawable
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_ios_24), contentDescription = null)
-
-            }
-
-            IconButton(
-                onClick = {
-                    // Handle button click here
-                },
-                modifier = Modifier.padding(16.dp)
-            ) {
-
-                // add the menu button over here ...
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_24), contentDescription = null)
-            }
-        }
-
-
-        // icon button row ends over here...
-        // add the input text field for heading ...
-        InputTextExample()
-
-        // add the blank field for content...
-        InputTextExample()
-        // add the bottom  navigation view...
-        RoundedCornerBox()
-    }
-}

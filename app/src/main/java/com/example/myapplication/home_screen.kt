@@ -7,30 +7,31 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.semantics.Role.Companion.Image
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.model.note
+import com.example.myapplication.networking.NoteServiceNetwork
+import com.example.myapplication.routing.Navigation
+import com.example.myapplication.routing.Screen
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,7 +39,16 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class home : ComponentActivity() {
+
+// Api ---> create note --> https:// note_taking.app.com/notes/create
+// Api --> update --> https:// note_taking.app.com/notes/edit
+// Api --> delete --> https:// note_taking.app.com/notes/delete
+// Api --> list/fetch --> https:// note_taking.app.com/notes
+
+class home_screen : ComponentActivity() {
+
+    lateinit var navcontroller : NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -48,14 +58,18 @@ class home : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-//                    Greeting2("Android")
-                    home_screen(34)
+
+                    Navigation()
                     get_home_data()
                 }
             }
         }
     }
 
+
+    /*
+     * function to fetch data using retrofit...
+     */
    fun get_home_data()
    {
        var retrofit = Retrofit.Builder()
@@ -95,23 +109,11 @@ class home : ComponentActivity() {
 
 
 
+// Main function ...
 @Composable
-fun Greeting2(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview2() {
-    MyApplicationTheme {
-        Greeting2("Android")
-    }
-}
-
-
-@Composable
-fun home_screen(response: Int)
+fun home(navController: NavController)
 {
+
     // add a column for full screen ...
     Column(modifier =  Modifier.fillMaxSize()) {
 
@@ -150,13 +152,13 @@ fun home_screen(response: Int)
         }
 
         // add archive heading over here...
-        Text(response.toString())
+        Text("Your note heading over here ...")
 
         // add scrollable list horizontal for filter...
         LazyRowExample()
 
         // add the grid in the below region ...
-        LazyColumnExample()
+        LazyColumnExample(navController)
 
     }
 }
@@ -164,9 +166,54 @@ fun home_screen(response: Int)
 
 
 
+// card to show one note --- a smaller one home screen ...
+@Composable
+fun card_visible(navController: NavController)
+{
+//     var navController : NavController = rememberNavController()
+    Box(
+        modifier = Modifier
+//            .width(200.dp)// Adjust width    as needed
+            .clickable {
+                navController.navigate("edit_note")
+            }
+            .height(350.dp)
+            .padding(16.dp)
+            .background(
+                color = Color.Red, // Background color
+                shape = RoundedCornerShape(26.dp) // Adjust the corner radius as needed
+            )
+    ) {
+
+        Column(modifier = Modifier.padding(20.dp)) {
+            Text("Buy honey 100% original", style = androidx.compose.ui.text.TextStyle(fontSize = 20.sp))
+
+            Text("Buy the new brand honey for my family. here's the pic.")
+            Button(
+                onClick = {
+                    // Define the action you want to perform when the button is clicked.
+                          navController.navigate("edit_note")
+                    // You can navigate to another screen, update data, etc.
+                },
+                modifier = Modifier
+                    .padding(16.dp) // You can add padding or other modifiers as needed
+            ) {
+                // Text displayed on the button
+                Text("Click Me")
+            }
+
+        }
+
+    }
+}
+
+
+
+
+
 @Composable
 fun LazyRowExample() {
-    val items = (1..50).toList() // Replace with your list of items
+    val items = (1..2).toList() // Replace with your list of items
 
     LazyRow(
         modifier = Modifier.fillMaxWidth()
@@ -188,47 +235,34 @@ fun RoundedCornerBoxRow() {
                 shape = RoundedCornerShape(16.dp) // Adjust the corner radius as needed
             )
     ) {
-
         Text("All (20)")
     }
 }
 
 
 @Composable
-fun RowItem(item: Int) {
-    // Customize the content of each row item here
-    // For example:
-    // add box over here...
+fun RowItem(item: Int ) {
     RoundedCornerBoxRow()
-//    Text(
-//        text = "Item $item",
-//        modifier = Modifier.padding(16.dp)
-//    )
 }
 
 
 // scrollable column for now ...
 @Composable
-fun LazyColumnExample() {
+fun LazyColumnExample(navController: NavController) {
     val items = (1..20).toList() // Replace with your list of items
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
         items(items) { item ->
-            ColumnItem(item)
+            ColumnItem(item , navController)
         }
     }
 }
 
 @Composable
-fun ColumnItem(item: Int) {
-    // Customize the content of each column item here
-    // For example:
-    Text(
-        text = "Item $item",
-        modifier = Modifier.padding(16.dp)
-    )
+fun ColumnItem(item: Int , navController: NavController) {
+    card_visible(navController)
 }
 
 
