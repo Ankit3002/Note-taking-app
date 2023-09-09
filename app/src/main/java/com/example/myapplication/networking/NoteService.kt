@@ -10,7 +10,7 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
-const val BASE_URL = " https:// note_taking.app.com/notes"
+const val BASE_URL = "https:// note_taking.app.com/notes"
 
 interface NoteService {
     @GET("notes")
@@ -24,6 +24,9 @@ interface NoteService {
 
     @POST("notes")
     fun createNote(@Body newNote: note): Call<note>
+
+    @GET("notes/{noteId}")
+    fun getNotebyId(@Path("noteId") noteId: String): Call<note>
 
 }
 

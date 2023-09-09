@@ -33,6 +33,7 @@ import com.example.myapplication.networking.NoteServiceNetwork
 import com.example.myapplication.routing.Navigation
 import com.example.myapplication.routing.Screen
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.utils.getNoteValues
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -114,6 +115,17 @@ class home_screen : ComponentActivity() {
 fun home(navController: NavController)
 {
 
+//    val note_list = getNoteValues()
+//    for(note in note_list )
+//    {
+//        Log.d("feature_ankit", note.heading)
+//    }
+
+    val note_list = listOf(
+        note("1","first heading ", "first message"),
+        note("2","Second heading ", "Second message")
+    )
+
     // add a column for full screen ...
     Column(modifier =  Modifier.fillMaxSize()) {
 
@@ -158,7 +170,7 @@ fun home(navController: NavController)
         LazyRowExample()
 
         // add the grid in the below region ...
-        LazyColumnExample(navController)
+        LazyColumnExample(navController , note_list )
 
     }
 }
@@ -168,15 +180,15 @@ fun home(navController: NavController)
 
 // card to show one note --- a smaller one home screen ...
 @Composable
-fun card_visible(navController: NavController)
+fun card_visible(note_value :note ,  navController: NavController)
 {
 //     var navController : NavController = rememberNavController()
     Box(
         modifier = Modifier
 //            .width(200.dp)// Adjust width    as needed
-            .clickable {
-                navController.navigate("edit_note")
-            }
+//            .clickable {
+//                navController.navigate("edit_note")
+//            }
             .height(350.dp)
             .padding(16.dp)
             .background(
@@ -186,13 +198,13 @@ fun card_visible(navController: NavController)
     ) {
 
         Column(modifier = Modifier.padding(20.dp)) {
-            Text("Buy honey 100% original", style = androidx.compose.ui.text.TextStyle(fontSize = 20.sp))
+            Text(note_value.heading, style = androidx.compose.ui.text.TextStyle(fontSize = 20.sp))
 
-            Text("Buy the new brand honey for my family. here's the pic.")
+            Text(note_value.message)
             Button(
                 onClick = {
                     // Define the action you want to perform when the button is clicked.
-                          navController.navigate("edit_note")
+                          navController.navigate("edit_note/0")
                     // You can navigate to another screen, update data, etc.
                 },
                 modifier = Modifier
@@ -248,22 +260,38 @@ fun RowItem(item: Int ) {
 
 // scrollable column for now ...
 @Composable
-fun LazyColumnExample(navController: NavController) {
-    val items = (1..20).toList() // Replace with your list of items
-
+fun LazyColumnExample(navController: NavController , note_list : List<note> ) {
+//    val items = (1..20).toList() // Replace with your list of items
+//
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-        items(items) { item ->
+
+//        for(note in note_list.indices)
+//        {
+//            ColumnItem(item = note, navController =  navController)
+//
+//        }
+
+//         items(note_list){
+//             item->
+//                ColumnItem(note_value = item, navController =navController )
+//         }
+
+        items(note_list) { item ->
             ColumnItem(item , navController)
         }
     }
 }
 
 @Composable
-fun ColumnItem(item: Int , navController: NavController) {
-    card_visible(navController)
+fun ColumnItem(note_value : note, navController: NavController) {
+    if (note_value != null) {
+        card_visible(note_value, navController)
+    }
+
 }
+
 
 
 // scrollable grid .. below..
