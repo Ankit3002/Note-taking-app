@@ -1,15 +1,14 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,11 +16,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapplication.model.note
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.utils.NoteViewModel
 import com.example.myapplication.utils.getANoteValue
-import com.example.myapplication.utils.getNoteValues
+//import com.example.myapplication.utils.getNoteValues
 
 
 /*
@@ -53,11 +55,19 @@ import com.example.myapplication.utils.getNoteValues
 fun notes_edit_screen(id : String)
 {
     // fetch the particular note from the id ...
+    val viewModel: NoteViewModel = viewModel()
+//    val nodestate by viewModel.noteState
+    LaunchedEffect(id){
+        viewModel.fetchANote(id)
+    }
+    val note_value by viewModel.noteState
 
+
+//    val note_value =  viewModel.noteState
 //    val note_value = getANoteValue(id)
 
     //mocking note object for now ...
-    val note_value = note("123", "edit screen created", "message is nothing")
+//    val note_value = note("123", "edit screen created", "message is nothing")
     Column(modifier = Modifier.fillMaxSize() ,  verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally)
     {
@@ -77,7 +87,9 @@ fun notes_edit_screen(id : String)
                 onClick = {
                     // Handle button click here
                 },
-                modifier = Modifier.padding(16.dp).size(30.dp)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(30.dp)
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.baseline_cloud_done_24),
@@ -90,10 +102,10 @@ fun notes_edit_screen(id : String)
 
         // icon button row ends over here...
         // add the input text field for heading ...
-        HeadingOutlineText(note_value = note_value)
+        note_value?.let { HeadingOutlineText(note_value = it) }
 
         // add the blank field for content...
-        MessageOutlineText(note_value = note_value)
+        note_value?.let { MessageOutlineText(note_value = it) }
         // add the bottom  navigation view...
         RoundedCornerBox()
     }
@@ -123,7 +135,9 @@ fun notes_create_screen()
                 onClick = {
                     // Handle button click here
                 },
-                modifier = Modifier.padding(16.dp).size(30.dp)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(30.dp)
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.baseline_cloud_done_24),
@@ -154,6 +168,7 @@ fun notes_create_screen()
 // Text field...
 @Composable
 fun HeadingOutlineText(note_value : note) {
+    Log.d("outline_checking", note_value.heading)
     // Create a state to hold the text entered by the user
     val textState = remember { mutableStateOf(note_value.heading) }
 

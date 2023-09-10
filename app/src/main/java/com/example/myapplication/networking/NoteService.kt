@@ -10,7 +10,8 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
-const val BASE_URL = "https:// note_taking.app.com/notes"
+const val BASE_URL = "https://notemanagementservice-production.up.railway.app/api/v1/"
+// https://notemanagementservice-production.up.railway.app/api/v1/notes
 
 interface NoteService {
     @GET("notes")

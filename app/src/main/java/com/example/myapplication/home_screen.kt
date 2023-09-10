@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.model.note
@@ -34,7 +36,9 @@ import com.example.myapplication.networking.NoteServiceNetwork
 import com.example.myapplication.routing.Navigation
 import com.example.myapplication.routing.Screen
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import com.example.myapplication.utils.getNoteValues
+import com.example.myapplication.utils.NoteViewModel
+import com.example.myapplication.utils.getAllNoteValues
+//import com.example.myapplication.utils.getNoteValues
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -116,16 +120,19 @@ class home_screen : ComponentActivity() {
 fun home(navController: NavController)
 {
 
-//    val note_list = getNoteValues()
+//    val note_list = getAllNoteValues()
 //    for(note in note_list )
 //    {
 //        Log.d("feature_ankit", note.heading)
 //    }
 
-    val note_list = listOf(
-        note("1","first heading ", "first message"),
-        note("2","Second heading ", "Second message")
-    )
+//    val note_list = listOf(
+//        note("1","first heading ", "first message"),
+//        note("2","Second heading ", "Second message")
+//    )
+
+    val viewModel: NoteViewModel = viewModel()
+    val note_list by viewModel.noteListState
 
     // add a column for full screen ...
     Column(modifier =  Modifier.fillMaxSize()
@@ -202,7 +209,7 @@ fun card_visible(note_value :note ,  navController: NavController)
         modifier = Modifier
 //            .width(200.dp)// Adjust width    as needed
             .clickable {
-                navController.navigate("edit_note/0")
+                navController.navigate("edit_note/"+note_value.id)
             }
             .height(350.dp)
             .fillMaxWidth()
@@ -214,7 +221,7 @@ fun card_visible(note_value :note ,  navController: NavController)
     ) {
 
         Column(modifier = Modifier.padding(10.dp)) {
-            Text(note_value.heading, style = androidx.compose.ui.text.TextStyle(fontSize = 20.sp))
+            Text(note_value.heading, style = androidx.compose.ui.text.TextStyle(fontSize = 25.sp))
 
             Text(note_value.message)
 
