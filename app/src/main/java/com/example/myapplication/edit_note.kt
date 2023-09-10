@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.example.myapplication.model.note
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.utils.NoteViewModel
+import com.example.myapplication.utils.createNoteValue
 import com.example.myapplication.utils.getANoteValue
 //import com.example.myapplication.utils.getNoteValues
 
@@ -114,8 +115,15 @@ fun notes_edit_screen(id : String)
 
 // notes create screen
 @Composable
-fun notes_create_screen()
+fun notes_create_screen(navController: NavController)
 {
+    val textState_heading = remember { mutableStateOf("") }
+    val textState_message = remember { mutableStateOf("") }
+    val viewModel: NoteViewModel = viewModel()
+//    val nodestate by viewModel.noteState
+
+//    val note_value by viewModel.noteState
+
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally)
     {
@@ -134,6 +142,14 @@ fun notes_create_screen()
             IconButton(
                 onClick = {
                     // Handle button click here
+                    // create note object out of current ...
+                    val note_value : note = note("anything", textState_heading.value, textState_message.value)
+                    val note_id = viewModel.createNoteCo(note_value)
+                    if(!note_id.equals("failure"))
+                    {
+                        navController.navigate("edit_note/"+note_id)
+                    }
+
                 },
                 modifier = Modifier
                     .padding(16.dp)
@@ -150,10 +166,52 @@ fun notes_create_screen()
 
         // icon button row ends over here...
         // add the input text field for heading ...
-        HeadingOutlineText(note_value = note("123", "", ""))
+//        HeadingOutlineText(note_value = note("123", "", ""))
+
+
+
+        Column {
+            // Create a TextField composable
+            OutlinedTextField(
+                value = textState_heading.value,
+                onValueChange = {
+                    // Update the text state when the user types
+                    textState_heading.value = it
+                },
+                label = { Text("Enter heading") },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(100.dp)
+            )
+
+            // Display the entered text
+//        Text(text = "Entered text: ${textState.value}", modifier = Modifier.padding(16.dp))
+        }
 
         // add the blank field for content...
-        MessageOutlineText(note_value = note("123" , "", ""))
+//        MessageOutlineText(note_value = note("123" , "", ""))
+
+
+        Column {
+            // Create a TextField composable
+            OutlinedTextField(
+                value = textState_message.value,
+                onValueChange = {
+                    // Update the text state when the user types
+                    textState_message.value = it
+                },
+                label = { Text("Enter Message") },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(500.dp)
+            )
+
+            // Display the entered text
+//        Text(text = "Entered text: ${textState.value}", modifier = Modifier.padding(16.dp))
+        }
+
         // add the bottom  navigation view...
         RoundedCornerBox()
     }

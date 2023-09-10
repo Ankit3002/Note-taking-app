@@ -66,7 +66,7 @@ class home_screen : ComponentActivity() {
                 ) {
 
                     Navigation()
-                    get_home_data()
+//                    get_home_data()
                 }
             }
         }
@@ -76,39 +76,39 @@ class home_screen : ComponentActivity() {
     /*
      * function to fetch data using retrofit...
      */
-   fun get_home_data()
-   {
-       var retrofit = Retrofit.Builder()
-           .baseUrl("https://simplifiedcoding.net/demos/")
-           .addConverterFactory(GsonConverterFactory.create())
-           .build();  // Part 1
-
-       val api = retrofit.create(superheroAPI::class.java);
-
-
-       api.getHeroes()?.enqueue(
-           object : Callback<List<content?>?> {
-               override fun onResponse(call: Call<List<content?>?>?,
-                                       response: Response<List<content?>?>) {
-                   val heroList: List<content> = response.body() as List<content> // Now we can use
-
-                   for(value in heroList)
-                   {
-                       Log.d("ankit", value.realname)
-
-                   }
-
-               }
-
-               override fun onFailure(call: Call<List<content?>?>?, t: Throwable) {
-                   Toast.makeText(applicationContext, t.message,
-                       Toast.LENGTH_SHORT).show()
-               }
-           }
-       )
-
-
-   }
+//   fun get_home_data()
+//   {
+//       var retrofit = Retrofit.Builder()
+//           .baseUrl("https://simplifiedcoding.net/demos/")
+//           .addConverterFactory(GsonConverterFactory.create())
+//           .build();  // Part 1
+//
+//       val api = retrofit.create(superheroAPI::class.java);
+//
+//
+//       api.getHeroes()?.enqueue(
+//           object : Callback<List<content?>?> {
+//               override fun onResponse(call: Call<List<content?>?>?,
+//                                       response: Response<List<content?>?>) {
+//                   val heroList: List<content> = response.body() as List<content> // Now we can use
+//
+//                   for(value in heroList)
+//                   {
+//                       Log.d("ankit", value.realname)
+//
+//                   }
+//
+//               }
+//
+//               override fun onFailure(call: Call<List<content?>?>?, t: Throwable) {
+//                   Toast.makeText(applicationContext, t.message,
+//                       Toast.LENGTH_SHORT).show()
+//               }
+//           }
+//       )
+//
+//
+//   }
 
 
 }

@@ -39,7 +39,7 @@ fun Navigation()
         }
         // create note ...
         composable(route = "create_note"){
-            notes_create_screen()
+            notes_create_screen(navController)
         }
 
     }

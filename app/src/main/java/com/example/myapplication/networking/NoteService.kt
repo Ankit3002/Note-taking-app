@@ -17,14 +17,14 @@ interface NoteService {
     @GET("notes")
     fun getNotes(): Call<List<note?>?>?
 
-    @PUT("notes/{noteId}")
-    fun updateNote(@Path("noteId") noteId: String, @Body updatedNote: note): Call<note>
+    @PUT("notes")
+    fun updateNote(@Body updatedNote: note): Call<note>
 
     @DELETE("notes/{noteId}")
     fun deleteNote(@Path("noteId") noteId: String): Call<Void>
 
     @POST("notes")
-    fun createNote(@Body newNote: note): Call<note>
+    fun createNote(@Body newNote: note): Call<String>
 
     @GET("notes/{noteId}")
     fun getNotebyId(@Path("noteId") noteId: String): Call<note>

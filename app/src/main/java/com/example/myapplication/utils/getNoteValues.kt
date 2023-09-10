@@ -51,6 +51,7 @@ class NoteViewModel : ViewModel() {
     // Here's an example with MutableState.
     val noteListState = mutableStateOf<List<note>>(emptyList())
     val noteState = mutableStateOf<note?>(null)
+    val createdState = mutableStateOf<String?>(null)
     init {
         fetchNotes()
     }
@@ -67,6 +68,14 @@ class NoteViewModel : ViewModel() {
             val note_value = getANoteValue(id)
             noteState.value = note_value
 
+        }
+    }
+
+    public fun createNoteCo(note_value : note)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            val status_note = createNoteValue(note_value)
+            createdState.value = status_note
         }
     }
 }
@@ -103,6 +112,18 @@ suspend fun getANoteValue(id : String) : note
         }
 
     }
+}
 
-
+suspend fun createNoteValue(note_value : note): String {
+    return withContext(Dispatchers.IO) {
+        val note_service_get_note = NoteServiceNetwork.NoteServiceInstance
+        val response = note_service_get_note.createNote(note_value)?.execute()
+//        val response = note_service_get_note.getNotes()?.execute()
+        if (response != null && response.isSuccessful) {
+            response.body() as String
+        } else {
+            // Handle the error or return an empty list
+            "failure"
+        }
+    }
 }
