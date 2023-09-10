@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -127,47 +128,61 @@ fun home(navController: NavController)
     )
 
     // add a column for full screen ...
-    Column(modifier =  Modifier.fillMaxSize()) {
+    Column(modifier =  Modifier.fillMaxSize()
+        .padding(10.dp)) {
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-
+        /// new code
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             // add the photo..
-
-
             Box(
                 modifier = Modifier
-                    .size(150.dp)
+                    .size(80.dp)
                     .background(
-                        color = Color.Gray, // Background color of the circle
+                        color = Color.Black, // Background color of the circle
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter =painterResource(id = R.drawable.matt), contentDescription = null,
+                    painter = painterResource(id = R.drawable.matt),
+                    contentDescription = null,
                     modifier = Modifier.clip(CircleShape)
                 )
             }
+
             // add the name ... hard coded for now...
-            Text(text = "Hi, Matt ")
+            Text(
+                text = "   Hi, Matt ",
+                modifier = Modifier
+                    .weight(1f) // Occupy available space
+                    .align(Alignment.CenterVertically) // Center vertically
+            ,  style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.SemiBold)
+            )
 
             IconButton(
                 onClick = {
                     // Handle button click here
+                    navController.navigate("create_note")
                 },
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp).size(40.dp)
             ) {
                 // You can use an ImageVector or a Drawable
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_24), contentDescription = null)
-
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_add_circle_24),
+                    contentDescription = null
+                )
             }
         }
 
+
         // add archive heading over here...
-        Text("Your note heading over here ...")
+        Text("My Notes", style = TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold))
 
         // add scrollable list horizontal for filter...
-        LazyRowExample()
+//        LazyRowExample()
 
         // add the grid in the below region ...
         LazyColumnExample(navController , note_list )
@@ -186,33 +201,22 @@ fun card_visible(note_value :note ,  navController: NavController)
     Box(
         modifier = Modifier
 //            .width(200.dp)// Adjust width    as needed
-//            .clickable {
-//                navController.navigate("edit_note")
-//            }
+            .clickable {
+                navController.navigate("edit_note/0")
+            }
             .height(350.dp)
-            .padding(16.dp)
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp)
             .background(
                 color = Color.Red, // Background color
-                shape = RoundedCornerShape(26.dp) // Adjust the corner radius as needed
+                shape = RoundedCornerShape(20.dp) // Adjust the corner radius as needed
             )
     ) {
 
-        Column(modifier = Modifier.padding(20.dp)) {
+        Column(modifier = Modifier.padding(10.dp)) {
             Text(note_value.heading, style = androidx.compose.ui.text.TextStyle(fontSize = 20.sp))
 
             Text(note_value.message)
-            Button(
-                onClick = {
-                    // Define the action you want to perform when the button is clicked.
-                          navController.navigate("edit_note/0")
-                    // You can navigate to another screen, update data, etc.
-                },
-                modifier = Modifier
-                    .padding(16.dp) // You can add padding or other modifiers as needed
-            ) {
-                // Text displayed on the button
-                Text("Click Me")
-            }
 
         }
 
@@ -261,22 +265,9 @@ fun RowItem(item: Int ) {
 // scrollable column for now ...
 @Composable
 fun LazyColumnExample(navController: NavController , note_list : List<note> ) {
-//    val items = (1..20).toList() // Replace with your list of items
-//
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-
-//        for(note in note_list.indices)
-//        {
-//            ColumnItem(item = note, navController =  navController)
-//
-//        }
-
-//         items(note_list){
-//             item->
-//                ColumnItem(note_value = item, navController =navController )
-//         }
 
         items(note_list) { item ->
             ColumnItem(item , navController)

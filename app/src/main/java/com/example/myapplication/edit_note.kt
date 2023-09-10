@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -57,34 +58,34 @@ fun notes_edit_screen(id : String)
 
     //mocking note object for now ...
     val note_value = note("123", "edit screen created", "message is nothing")
-    Column(modifier = Modifier.fillMaxSize())
+    Column(modifier = Modifier.fillMaxSize() ,  verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally)
     {
         // back and menu button ...
-        Row(modifier =  Modifier.fillMaxWidth()) {
-
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             // add the back button over here ...
+
+
+            // Add space between the buttons and the right edge of the row
+            Spacer(modifier = Modifier.weight(1f))
+
+            // add the menu button over here ...
             IconButton(
                 onClick = {
                     // Handle button click here
                 },
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp).size(30.dp)
             ) {
-                // You can use an ImageVector or a Drawable
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_ios_24), contentDescription = null)
-
-            }
-
-            IconButton(
-                onClick = {
-                    // Handle button click here
-                },
-                modifier = Modifier.padding(16.dp)
-            ) {
-
-                // add the menu button over here ...
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_24), contentDescription = null)
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_cloud_done_24),
+                    contentDescription = null
+                )
             }
         }
+
 
 
         // icon button row ends over here...
@@ -103,42 +104,42 @@ fun notes_edit_screen(id : String)
 @Composable
 fun notes_create_screen()
 {
-    Column(modifier = Modifier.fillMaxSize())
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally)
     {
         // back and menu button ...
-        Row(modifier =  Modifier.fillMaxWidth()) {
-
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             // add the back button over here ...
+
+
+            // Add space between the buttons and the right edge of the row
+            Spacer(modifier = Modifier.weight(1f))
+
+            // add the menu button over here ...
             IconButton(
                 onClick = {
                     // Handle button click here
                 },
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp).size(30.dp)
             ) {
-                // You can use an ImageVector or a Drawable
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_ios_24), contentDescription = null)
-
-            }
-
-            IconButton(
-                onClick = {
-                    // Handle button click here
-                },
-                modifier = Modifier.padding(16.dp)
-            ) {
-
-                // add the menu button over here ...
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_24), contentDescription = null)
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_cloud_done_24),
+                    contentDescription = null
+                )
             }
         }
 
 
+
         // icon button row ends over here...
         // add the input text field for heading ...
-        HeadingOutlineText(note_value = note("1234", " nothing ", "no message for now"))
+        HeadingOutlineText(note_value = note("123", "", ""))
 
         // add the blank field for content...
-        MessageOutlineText(note_value = note("123344" , "nothing ", "no message for now"))
+        MessageOutlineText(note_value = note("123" , "", ""))
         // add the bottom  navigation view...
         RoundedCornerBox()
     }
@@ -207,7 +208,6 @@ fun MessageOutlineText(note_value : note) {
 fun RoundedCornerBox() {
     Box(
         modifier = Modifier
-            .fillMaxWidth() // Adjust width as needed
             .padding(16.dp)
             .background(
                 color = Color.Red, // Background color
@@ -233,28 +233,6 @@ fun RoundedCornerBox() {
 
             }
 
-            // edit over here..
-            IconButton(
-                onClick = {
-                    // Handle button click here
-                },
-                modifier = Modifier.padding(16.dp)
-            ){
-                Icon(imageVector =
-                ImageVector.vectorResource(id = R.drawable.baseline_edit_24), contentDescription = null)
-            }
-
-            // attach over here..
-            IconButton(
-                onClick = {
-                    // Handle button click here
-                },
-                modifier = Modifier.padding(16.dp)
-            ){
-                Icon(imageVector =
-                ImageVector.vectorResource(id = R.drawable.baseline_attach_file_24), contentDescription = null)
-            }
-
             // list over here..
 
             IconButton(
@@ -265,7 +243,7 @@ fun RoundedCornerBox() {
             ){
 
                 Icon(imageVector =
-                ImageVector.vectorResource(id = R.drawable.baseline_format_list_bulleted_24), contentDescription = null)
+                ImageVector.vectorResource(id = R.drawable.baseline_delete_24), contentDescription = null)
 
             }
 
