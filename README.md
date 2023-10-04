@@ -1,5 +1,5 @@
 # Note-taking-app
-I've created a comprehensive Android note-taking app with an easy-to-use interface using Jetpack Compose. 
+A comprehensive Android note-taking app with an easy-to-use interface using Jetpack Compose. 
 It connects to external services through Retrofit and relies on Spring Boot for the backend.
 I've made screen transitions smooth with Jetpack Navigation, and for storing data, I've employed a MySQL database. 
 This setup allows me to easily manage and manipulate data through Spring Boot APIs. 
