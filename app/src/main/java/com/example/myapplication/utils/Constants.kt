@@ -13,6 +13,8 @@ class Constants {
 
             const val edit_note_value: String = "edit_note"
 
+            const val signUp_screen_value :String = "sign_up_screen"
+
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.myapplication.utils
 
+
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.example.myapplication.model.note
@@ -52,78 +53,83 @@ class NoteViewModel : ViewModel() {
     val noteListState = mutableStateOf<List<note>>(emptyList())
     val noteState = mutableStateOf<note?>(null)
     val createdState = mutableStateOf<String?>(null)
-    init {
-        fetchNotes()
-    }
-
-    public fun fetchNotes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val notes = getAllNoteValues()
-            noteListState.value = notes
-        }
-    }
-
-    public fun fetchANote(id : String){
-        viewModelScope.launch(Dispatchers.IO) {
-            val note_value = getANoteValue(id)
-            noteState.value = note_value
-
-        }
-    }
-
-    public fun createNoteCo(note_value : note)
-    {
-        viewModelScope.launch(Dispatchers.IO) {
-            val status_note = createNoteValue(note_value)
-            createdState.value = status_note
-        }
-    }
+//    init {
+//        fetchNotes()
+//    }
+//
+//    public fun fetchNotes() {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val notes = getAllNoteValues()
+//            noteListState.value = notes
+//        }
+//    }
+//
+//    public fun fetchANote(id : String){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val note_value = getANoteValue(id)
+//            noteState.value = note_value
+//
+//        }
+//    }
+//
+//    public fun createNoteCo(note_value : note)
+//    {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val status_note = createNoteValue(note_value)
+//            createdState.value = status_note
+//        }
+//    }
 }
 
 
 
 
-suspend fun getAllNoteValues(): List<note> {
-    return withContext(Dispatchers.IO) {
-        val note_service_get_note = NoteServiceNetwork.NoteServiceInstance
-        val response = note_service_get_note.getNotes()?.execute()
 
-        if (response != null && response.isSuccessful) {
-            response.body() as List<note>
-        } else {
-            // Handle the error or return an empty list
-            emptyList()
-        }
-    }
-}
-
-
-suspend fun getANoteValue(id : String) : note
-{
-    return withContext(Dispatchers.IO){
-        val note_service_get_note =  NoteServiceNetwork.NoteServiceInstance
-        val response = note_service_get_note.getNotebyId(id)?.execute()
-
-        if(response!= null && response.isSuccessful){
-            response.body() as note
-        }
-        else {
-            note("0","Error", "Internet is not working" )
-        }
-
-    }
-}
-
-suspend fun createNoteValue(note_value : note): String {
-    return withContext(Dispatchers.IO) {
-        val note_service_get_note = NoteServiceNetwork.NoteServiceInstance
-        val response = note_service_get_note.createNote(note_value)?.execute()
+//
+//suspend fun getAllNoteValues(): List<note> {
+//    return withContext(Dispatchers.IO) {
+//        val note_service_get_note = NoteServiceNetwork.NoteServiceInstance
 //        val response = note_service_get_note.getNotes()?.execute()
-        if (response != null && response.isSuccessful) {
-            response.body() as String
-        } else {
-            // Handle the error or return an empty list
-            "failure"
-        }
-    }
-}
+//
+//        if (response != null && response.isSuccessful) {
+//            response.body() as List<note>
+//        } else {
+//            // Handle the error or return an empty list
+//            emptyList()
+//        }
+//    }
+//}
+//
+//
+//suspend fun getANoteValue(id : String) : note
+//{
+//    return withContext(Dispatchers.IO){
+//        val note_service_get_note =  NoteServiceNetwork.NoteServiceInstance
+//        val response = note_service_get_note.getNotebyId(id)?.execute()
+//
+//        if(response!= null && response.isSuccessful){
+//            response.body() as note
+//        }
+//        else {
+//            note("0","Error", "Internet is not working" )
+//        }
+//
+//    }
+//}
+//
+//suspend fun createNoteValue(note_value : note): String {
+//    return withContext(Dispatchers.IO) {
+//        val note_service_get_note = NoteServiceNetwork.NoteServiceInstance
+//        val response = note_service_get_note.createNote(note_value)?.execute()
+////        val response = note_service_get_note.getNotes()?.execute()
+//        if (response != null && response.isSuccessful) {
+//            response.body() as String
+//        } else {
+//            // Handle the error or return an empty list
+//            "failure"
+//        }
+//    }
+//}
+//
+
+

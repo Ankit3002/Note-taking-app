@@ -8,4 +8,6 @@ sealed class Screen(val route:String) {
     object home_screen : Screen(Constants.NavigationStrings.home_screen_value)
     object edit_note : Screen(Constants.NavigationStrings.edit_note_value)
 
+    object SignUp_screen : Screen(Constants.NavigationStrings.signUp_screen_value)
+
 }

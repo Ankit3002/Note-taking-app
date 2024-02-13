@@ -16,7 +16,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,19 +33,23 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.model.User
 import com.example.myapplication.model.note
 import com.example.myapplication.networking.NoteServiceNetwork
 import com.example.myapplication.routing.Navigation
 import com.example.myapplication.routing.Screen
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.utils.NoteConnection
 import com.example.myapplication.utils.NoteViewModel
-import com.example.myapplication.utils.getAllNoteValues
+import com.example.myapplication.utils.UserConnection
+//import com.example.myapplication.utils.getAllNoteValues
 //import com.example.myapplication.utils.getNoteValues
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import androidx.compose.runtime.livedata.observeAsState
 
 
 // Api ---> create note --> https:// note_taking.app.com/notes/create
@@ -117,25 +123,14 @@ class home_screen : ComponentActivity() {
 
 // Main function ...
 @Composable
-fun home(navController: NavController)
+fun NotesUser_Screen(viewModel_note : NoteConnection ,viewModel_user : UserConnection, navController: NavController)
 {
 
-//    val note_list = getAllNoteValues()
-//    for(note in note_list )
-//    {
-//        Log.d("feature_ankit", note.heading)
-//    }
-
-//    val note_list = listOf(
-//        note("1","first heading ", "first message"),
-//        note("2","Second heading ", "Second message")
-//    )
-
-    val viewModel: NoteViewModel = viewModel()
-    val note_list by viewModel.noteListState
+    val isDataFetched by viewModel_note.isDataFetched.observeAsState(initial = false)
 
     // add a column for full screen ...
-    Column(modifier =  Modifier.fillMaxSize()
+    Column(modifier = Modifier
+        .fillMaxSize()
         .padding(10.dp)) {
 
         /// new code
@@ -162,7 +157,7 @@ fun home(navController: NavController)
 
             // add the name ... hard coded for now...
             Text(
-                text = "   Hi, Matt ",
+                text = "Hi " + viewModel_user.userName.value,
                 modifier = Modifier
                     .weight(1f) // Occupy available space
                     .align(Alignment.CenterVertically) // Center vertically
@@ -174,7 +169,9 @@ fun home(navController: NavController)
                     // Handle button click here
                     navController.navigate("create_note")
                 },
-                modifier = Modifier.padding(16.dp).size(40.dp)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(40.dp)
             ) {
                 // You can use an ImageVector or a Drawable
                 Icon(
@@ -186,18 +183,44 @@ fun home(navController: NavController)
 
 
         // add archive heading over here...
-        Text("My Notes", style = TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold))
+        Row{
+            Text("My Notes", style = TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold))
+            Spacer(modifier = Modifier.width(50.dp))
 
+            // button to refresh the notes over here...
+            IconButton(
+                onClick = {
+                    // Handle button click here
+//                    navController.navigate("create_note")
+                      // code to fetch the notes over here...
+                      viewModel_note.fetchNoteUser(User(viewModel_user.userName.value, viewModel_user.password.value))
+                },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(40.dp)
+            ) {
+                // You can use an ImageVector or a Drawable
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_refresh_24),
+                    contentDescription = null
+                )
+            }
+
+        }
         // add scrollable list horizontal for filter...
 //        LazyRowExample()
 
         // add the grid in the below region ...
-        LazyColumnExample(navController , note_list )
+
+//        viewModel_note.fetchNoteUser(User(viewModel_user.userName.value, viewModel_user.password.value))
+//        if(isDataFetched)
+//        {
+//        }
+
+        LazyColumnExample(navController = navController, note_list =viewModel_note.noteList.value )
 
     }
 }
-
-
 
 
 // card to show one note --- a smaller one home screen ...
@@ -209,7 +232,7 @@ fun card_visible(note_value :note ,  navController: NavController)
         modifier = Modifier
 //            .width(200.dp)// Adjust width    as needed
             .clickable {
-                navController.navigate("edit_note/"+note_value.id)
+                navController.navigate("edit_note/" + note_value.id)
             }
             .height(350.dp)
             .fillMaxWidth()
@@ -289,52 +312,6 @@ fun ColumnItem(note_value : note, navController: NavController) {
     }
 
 }
-
-
-
-// scrollable grid .. below..
-//
-//@Composable
-//fun ScrollableGrid() {
-//    val items = (1..100).toList() // Replace with your grid items
-//
-//    LazyVerticalGrid(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//    ) {
-//        items(items) { item ->
-//            GridItem(item = item)
-//        }
-//    }
-//}
-//
-//@Composable
-//fun GridItem(item: Int) {
-//    Card(
-//        modifier = Modifier
-//            .padding(8.dp)
-//            .fillMaxWidth(),
-//        shape = MaterialTheme.shapes.medium, // Adjust the shape as needed
-//        elevation = 4.dp // Elevation for the card
-//    ) {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(Color.White)
-//                .padding(16.dp),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            Text(text = "Item $item")
-//        }
-//    }
-//}
-//
-//@Preview
-//@Composable
-//fun ScrollableGridPreview() {
-//    ScrollableGrid()
-//}
 
 
 
