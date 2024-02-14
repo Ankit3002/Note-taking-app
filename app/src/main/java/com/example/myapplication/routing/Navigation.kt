@@ -17,6 +17,9 @@ import com.example.myapplication.HomeScreen
 import com.example.myapplication.NotesUser_Screen
 import com.example.myapplication.SignInScreen
 import com.example.myapplication.SignUpScreen
+import com.example.myapplication.model.User
+import com.example.myapplication.notes_create_screen
+import com.example.myapplication.notes_edit_screen
 //import com.example.myapplication.home
 //import com.example.myapplication.notes_create_screen
 //import com.example.myapplication.notes_edit_screen
@@ -44,7 +47,7 @@ fun Navigation()
             val id = requireNotNull(backstackEntry.arguments).getString("id")
             // call a function ...
             if (id != null) {
-//                notes_edit_screen(id)
+                notes_edit_screen(id, viewModel_note, viewModel_user, navController)
                 Log.d("Ankit_exception", "nothing to show")
             }
 
@@ -52,12 +55,13 @@ fun Navigation()
         // home screen note ...
         composable(route = "home")
         {
+            viewModel_note.fetchNoteUser(User(viewModel_user.userName.value, viewModel_user.password.value))
             NotesUser_Screen(viewModel_note, viewModel_user, navController)
         }
         // create note ...
-//        composable(route = "create_note"){
-//            notes_create_screen(navController)
-//        }
+        composable(route = "create_note"){
+            notes_create_screen(navController = navController, viewModel_user, viewModel_note )
+        }
 
         // composable for sign up screen over here...
         composable(route = "signUp")
@@ -74,6 +78,26 @@ fun Navigation()
         composable(route = "homie")
         {
             Text("User Already exists", style =  TextStyle(fontSize = 34.sp))
+        }
+        
+        composable(route = "already")
+        {
+            Text("User already exists")
+        }
+
+        composable(route = "incorrect")
+        {
+            Text("Password Entered Incorrect")
+        }
+
+        composable(route = "exist")
+        {
+            Text("User don't exist")
+        }
+
+        composable(route = "failed")
+        {
+            Text("Failed to create the user")
         }
 
         composable(route = "splash_screen")

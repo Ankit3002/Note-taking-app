@@ -3,11 +3,11 @@ package com.example.myapplication.model
 import com.google.gson.annotations.SerializedName
 
 class note(
-    @SerializedName("id")
+//    @SerializedName("id")
     val id : String ,
-    @SerializedName("heading")
+//    @SerializedName("heading")
     val heading : String,
-    @SerializedName("message")
+//    @SerializedName("message")
     val message : String ,
-    @SerializedName("user")
+//    @SerializedName("user")
     val user : User)

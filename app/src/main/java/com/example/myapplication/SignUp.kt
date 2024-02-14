@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
@@ -53,8 +56,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
+import coil.size.Size
+import com.example.myapplication.ui.theme.poppinsFamily
+import com.example.myapplication.ui.theme.strikeFontFamily
 import com.example.myapplication.utils.NoteConnection
 
 //import androidx.compose.runtime.livedata.observeAsState
@@ -89,57 +103,77 @@ fun HomeScreen(viewModel : UserConnection, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colors.background)
+            .background(color = Color.White)
     ) {
-        Image(painter = painterResource(id = R.drawable.clouds), contentDescription ="clouds", modifier = Modifier.fillMaxSize()
-            , contentScale = ContentScale.Crop)
+
      Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(start = 50.dp),
+         horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
+
+
+        Image(painter = painterResource(id = R.drawable.home_screen_image), contentDescription ="clouds",
+            modifier = Modifier
+                .height(250.dp)
+                .width(250.dp)
+                .padding(top = 60.dp),
+             contentScale = ContentScale.Crop)
+
             Text(
-                text = "Hello",
-                style = MaterialTheme.typography.h1,
+                text = "Hello!",
+                style = MaterialTheme.typography.h1
+                    , fontFamily = strikeFontFamily,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Text(
                 text = "You need to Sign in or Create an account",
                 style = MaterialTheme.typography.body2,
+                fontFamily = poppinsFamily,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
 
-                          /* Sign in */
-                          navController.navigate("signIn")
+         Button(
+             onClick = {
 
-                          },
-                modifier = Modifier.padding(horizontal = 15.dp)
-            ) {
-                Text(text = "Sign in")
-            }
+                 /* Sign in */
+                 navController.navigate("signIn")
+
+             },
+             colors = ButtonDefaults.buttonColors(
+                 backgroundColor = Color(0xFF5AE4A8)
+             ),
+
+         ) {
+             Text(text = "Sign in", style = TextStyle(
+                 fontWeight = FontWeight.Bold,
+                 fontFamily = poppinsFamily
+             ))
+         }
+
             Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Already Have an account?",
-                    style = MaterialTheme.typography.body2, fontSize = 18.sp
-                )
+         // button to sign up over here ...
+         Button(
+             onClick = { /* Sign Up */
 
-                // button to sign up over here ...
-                Button(
-                    onClick = { /* Sign Up */
+                 navController.navigate("signUp")
+             },
+             modifier = Modifier.padding(horizontal = 15.dp),
+             colors = ButtonDefaults.buttonColors(
+                 backgroundColor = Color(0xFF5AE4A8)
+             ),
+         ) {
+             Text(text = "Sign Up",
+                 style = TextStyle(
+                     fontWeight = FontWeight.Bold,
+                     fontFamily = poppinsFamily
+                 ))
+         }
 
-                              navController.navigate("signUp")
-                              },
-                    modifier = Modifier.padding(horizontal = 15.dp)
-                ) {
-                    Text(text = "Sign Up")
-                }
-            }
         }
     }
 }
@@ -151,30 +185,59 @@ fun SignInScreen(viewModel : UserConnection, navController: NavController, viewm
     val userName = remember{ mutableStateOf("") }
     val password = remember{ mutableStateOf("") }
 
-    Box{
-        Image(painter = painterResource(id = R.drawable.clouds), contentDescription ="clouds", modifier = Modifier.fillMaxSize()
-            , contentScale = ContentScale.Crop)
+    val context = LocalContext.current
+    val imageLoader = ImageLoader.Builder(context)
+        .components {
+            if (SDK_INT >= 28) {
+                add(ImageDecoderDecoder.Factory())
+            } else {
+                add(GifDecoder.Factory())
+            }
+        }
+        .build()
+
+    Box(modifier = Modifier.background(color = Color.White)){
+//        Image(painter = painterResource(id = R.drawable.clouds), contentDescription ="clouds", modifier = Modifier.fillMaxSize()
+//            , contentScale = ContentScale.Crop)
+//        Image(
+//            painter = rememberAsyncImagePainter(
+//                ImageRequest.Builder(context).data(data = R.drawable.sign_in_image).apply (block = {
+//                    size(Size.ORIGINAL)
+//                }) .build(), imageLoader = imageLoader
+//            ),
+//            contentDescription = null,
+//            modifier = Modifier.size(150.dp)
+//        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
 //            .background(Color.White)
                 .padding(vertical = 50.dp, horizontal = 32.dp)
         ) {
-            Text(
-                text = "Hello!",
-                style = TextStyle(
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
+            Image(
+                painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(context).data(data = R.drawable.sign_in_image).apply (block = {
+                        size(Size.ORIGINAL)
+                    }) .build(), imageLoader = imageLoader
+                ),
+                contentDescription = null,
+                modifier = Modifier.size(350.dp)
             )
             Text(
-                text = "Welcome back",
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
+                text = "Welcome Back!",
+                style = MaterialTheme.typography.h3
+                , fontFamily = strikeFontFamily,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+
             )
+//            Text(
+//                text = "Welcome back",
+//                style = TextStyle(
+//                    fontSize = 16.sp,
+//                    color = Color.Black
+//                )
+//            )
             Spacer(modifier = Modifier.height(16.dp))
             TextField(
                 value = userName.value,
@@ -206,9 +269,10 @@ fun SignInScreen(viewModel : UserConnection, navController: NavController, viewm
                     viewModel.signInUser(User(userName.value, password.value))
                     // based on the result switch to the screen..
                 },
+
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Black
+                    backgroundColor = Color(android.graphics.Color.parseColor("#4319ab"))
                 )
             ) {
                 Text(
@@ -216,7 +280,8 @@ fun SignInScreen(viewModel : UserConnection, navController: NavController, viewm
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.White,
+                        fontFamily = poppinsFamily
                     )
                 )
             }
@@ -233,11 +298,13 @@ fun SignInScreen(viewModel : UserConnection, navController: NavController, viewm
                         navController.navigate("home")
                     }
                     "Invalid_Password" -> {
-                        navController.navigate("homie")
+//                        navController.navigate("homie")
+                        navController.navigate("incorrect")
 
                     }
                     "User_Dont_exist" -> {
-                        navController.navigate("homie")
+//                        navController.navigate("homie")
+                        navController.navigate("exist")
                     }
 
                 }
@@ -256,10 +323,21 @@ fun SignUpScreen(viewModel : UserConnection, navController: NavController) {
     val userName = remember{ mutableStateOf("") }
     val password = remember{ mutableStateOf("") }
 
-    Box{
+    val context = LocalContext.current
+    val imageLoader = ImageLoader.Builder(context)
+        .components {
+            if (SDK_INT >= 28) {
+                add(ImageDecoderDecoder.Factory())
+            } else {
+                add(GifDecoder.Factory())
+            }
+        }
+        .build()
 
-        Image(painter = painterResource(id = R.drawable.clouds), contentDescription ="clouds", modifier = Modifier.fillMaxSize()
-            , contentScale = ContentScale.Crop)
+    Box(
+        modifier = Modifier.background(Color(android.graphics.Color.parseColor("#f7efe3")))
+    ){
+
 
         Column(
             modifier = Modifier
@@ -267,19 +345,29 @@ fun SignUpScreen(viewModel : UserConnection, navController: NavController) {
 //                .background(Color.White)
                 .padding(vertical = 50.dp, horizontal = 32.dp)
         ) {
+
+            Image(
+                painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(context).data(data = R.drawable.create_user).apply (block = {
+                        size(Size.ORIGINAL)
+                    }) .build(), imageLoader = imageLoader
+                ),
+                contentDescription = null,
+                modifier = Modifier.size(350.dp)
+            )
+
             Text(
-                text = "Hello!",
-                style = TextStyle(
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
+                text = "Nice to See you!",
+                style = MaterialTheme.typography.h3
+                , fontFamily = strikeFontFamily,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Text(
-                text = "Welcome back",
+                text = "Let's do some paper Work ...",
                 style = TextStyle(
                     fontSize = 16.sp,
-                    color = Color.White
+                    color = Color.Black,
+                    fontFamily = poppinsFamily
                 )
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -321,7 +409,8 @@ fun SignUpScreen(viewModel : UserConnection, navController: NavController) {
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.White,
+                        fontFamily = poppinsFamily
                     )
                 )
             }
@@ -330,7 +419,8 @@ fun SignUpScreen(viewModel : UserConnection, navController: NavController) {
             {
                 when(viewModel.Created_user_response.value){
                     "failure"->{
-                        navController.navigate("homie")
+//                        navController.navigate("failed")
+                        navController.navigate("exist")
 
                     }
 

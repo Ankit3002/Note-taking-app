@@ -50,6 +50,14 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.myapplication.ui.theme.poppinsFamily
+import com.example.myapplication.ui.theme.strikeFontFamily
 
 
 // Api ---> create note --> https:// note_taking.app.com/notes/create
@@ -77,51 +85,33 @@ class home_screen : ComponentActivity() {
             }
         }
     }
+}
 
-
-    /*
-     * function to fetch data using retrofit...
-     */
-//   fun get_home_data()
-//   {
-//       var retrofit = Retrofit.Builder()
-//           .baseUrl("https://simplifiedcoding.net/demos/")
-//           .addConverterFactory(GsonConverterFactory.create())
-//           .build();  // Part 1
-//
-//       val api = retrofit.create(superheroAPI::class.java);
-//
-//
-//       api.getHeroes()?.enqueue(
-//           object : Callback<List<content?>?> {
-//               override fun onResponse(call: Call<List<content?>?>?,
-//                                       response: Response<List<content?>?>) {
-//                   val heroList: List<content> = response.body() as List<content> // Now we can use
-//
-//                   for(value in heroList)
-//                   {
-//                       Log.d("ankit", value.realname)
-//
-//                   }
-//
-//               }
-//
-//               override fun onFailure(call: Call<List<content?>?>?, t: Throwable) {
-//                   Toast.makeText(applicationContext, t.message,
-//                       Toast.LENGTH_SHORT).show()
-//               }
-//           }
-//       )
-//
-//
-//   }
-
+@Preview
+@Composable
+fun lund(){
+    Box(
+        modifier = Modifier
+            .clickable {
+                // Handle click action
+            }
+            .size(100.dp)
+            .background(shape = CircleShape, color = Color.White)
+            .padding(12.dp) // Adjust padding as needed
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.create_button),
+            contentDescription = "clouds",
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+        )
+    }
 
 }
 
 
-
-// Main function ...
+// this one is the home screen ...
 @Composable
 fun NotesUser_Screen(viewModel_note : NoteConnection ,viewModel_user : UserConnection, navController: NavController)
 {
@@ -131,6 +121,7 @@ fun NotesUser_Screen(viewModel_note : NoteConnection ,viewModel_user : UserConne
     // add a column for full screen ...
     Column(modifier = Modifier
         .fillMaxSize()
+        .background(color = Color.White)
         .padding(10.dp)) {
 
         /// new code
@@ -139,64 +130,84 @@ fun NotesUser_Screen(viewModel_note : NoteConnection ,viewModel_user : UserConne
             verticalAlignment = Alignment.CenterVertically
         ) {
             // add the photo..
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .background(
-                        color = Color.Black, // Background color of the circle
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
+//            Box(
+//                modifier = Modifier
+//                    .size(100.dp)
+//                    .background(
+//                        color = Color.Black, // Background color of the circle
+////                        shape = CircleShape
+//                    ),
+//                contentAlignment = Alignment.Center
+//            ) {
+//
+//                )
+//            }
+            Box(modifier =
+            Modifier.background(shape = CircleShape, color = Color.Black).size(100.dp).padding(1.dp)){
                 Image(
-                    painter = painterResource(id = R.drawable.matt),
+                    painter = painterResource(id = R.drawable.account),
                     contentDescription = null,
-                    modifier = Modifier.clip(CircleShape)
-                )
+                    modifier = Modifier.fillMaxSize().clip(CircleShape))
             }
 
             // add the name ... hard coded for now...
             Text(
-                text = "Hi " + viewModel_user.userName.value,
+                text = "  Hi " + viewModel_user.userName.value,
                 modifier = Modifier
                     .weight(1f) // Occupy available space
                     .align(Alignment.CenterVertically) // Center vertically
-            ,  style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.SemiBold)
+//            ,  style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.SemiBold)
+                       , style = MaterialTheme.typography.h5
+                , fontFamily = strikeFontFamily,
+                color = Color.Black
             )
 
-            IconButton(
-                onClick = {
-                    // Handle button click here
-                    navController.navigate("create_note")
-                },
+            Box(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .size(40.dp)
+                    .clickable {
+                        // Handle click action
+                        navController.navigate("create_note")
+                    }
+                    .size(100.dp)
+                    .background(shape = CircleShape, color = Color.Black)
+                    .padding(1.dp) // Adjust padding as needed
             ) {
-                // You can use an ImageVector or a Drawable
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_add_circle_24),
-                    contentDescription = null
+                Image(
+                    painter = painterResource(id = R.drawable.create_button),
+                    contentDescription = "clouds",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape)
                 )
             }
+
+
+
         }
 
+        Spacer(modifier = Modifier.height(30.dp))
 
         // add archive heading over here...
         Row{
-            Text("My Notes", style = TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold))
-            Spacer(modifier = Modifier.width(50.dp))
+            Text("My Notes",
+                style = MaterialTheme.typography.h3
+                , fontFamily = strikeFontFamily,
+                color = Color.Black
+//                modifier = Modifier.align(Alignment.CenterHorizontally)
+
+//                style = TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold)
+            )
+            Spacer(modifier = Modifier.width(100.dp))
 
             // button to refresh the notes over here...
             IconButton(
                 onClick = {
                     // Handle button click here
-//                    navController.navigate("create_note")
                       // code to fetch the notes over here...
                       viewModel_note.fetchNoteUser(User(viewModel_user.userName.value, viewModel_user.password.value))
                 },
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(top = 15.dp)
                     .size(40.dp)
             ) {
                 // You can use an ImageVector or a Drawable
@@ -207,17 +218,8 @@ fun NotesUser_Screen(viewModel_note : NoteConnection ,viewModel_user : UserConne
             }
 
         }
-        // add scrollable list horizontal for filter...
-//        LazyRowExample()
-
-        // add the grid in the below region ...
-
-//        viewModel_note.fetchNoteUser(User(viewModel_user.userName.value, viewModel_user.password.value))
-//        if(isDataFetched)
-//        {
-//        }
-
-        LazyColumnExample(navController = navController, note_list =viewModel_note.noteList.value )
+        if(viewModel_note.noteList.value.size > 0)
+            LazyColumnExample(navController = navController, note_list =viewModel_note.noteList.value )
 
     }
 }
@@ -234,20 +236,44 @@ fun card_visible(note_value :note ,  navController: NavController)
             .clickable {
                 navController.navigate("edit_note/" + note_value.id)
             }
-            .height(350.dp)
+            .height(320.dp)
             .fillMaxWidth()
             .padding(top = 10.dp, bottom = 10.dp)
             .background(
-                color = Color.Red, // Background color
-                shape = RoundedCornerShape(20.dp) // Adjust the corner radius as needed
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color(android.graphics.Color.parseColor("#9336B4")),
+                        Color(android.graphics.Color.parseColor("#40128B")) // Transparent color for the top right
+                    ),
+                    start = Offset(0f, 1f),
+                    end = Offset(1f, 0f),
+                    tileMode = TileMode.Clamp
+                ),
+                shape = RoundedCornerShape(20.dp)
             )
+//            .clip(RoundedCornerShape(20.dp))
+//            .background(
+//                color = Color(android.graphics.Color.parseColor("#9336B4")), // Background color
+//                shape = RoundedCornerShape(20.dp) // Adjust the corner radius as needed
+//            )
     ) {
 
         Column(modifier = Modifier.padding(10.dp)) {
-            Text(note_value.heading, style = androidx.compose.ui.text.TextStyle(fontSize = 25.sp))
-
-            Text(note_value.message)
-
+            Text(note_value.heading,
+                style = TextStyle(
+                    fontFamily = strikeFontFamily,
+                    fontSize = 25.sp,
+                    color = Color.White
+                )
+            )
+            Text(note_value.message,
+                style = TextStyle(
+                    fontFamily = poppinsFamily,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold
+                    , color = Color.White
+                )
+            )
         }
 
     }

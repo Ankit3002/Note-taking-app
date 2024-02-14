@@ -14,23 +14,28 @@ import retrofit2.http.*
 
 //const val BASE_URL = "https://notemanagementservice-production.up.railway.app/api/v1/"
 // https://notemanagementservice-production.up.railway.app/api/v1/notes
-const val BASE_URL = "http://10.8.53.187:8080/api/v1/"
+const val BASE_URL = "https://notemanagementservice.onrender.com/api/v1/"
 
 interface NoteService {
-    @GET("notes")
-    fun getNotes(): Call<List<note?>?>?
+//    @GET("notes")
+//    fun getNotes(): Call<List<note?>?>?
+//
+
+    @POST("notes/{noteId}")
+    suspend fun deleteNote(@Path("noteId") id : String) : String
+
 
     @PUT("notes")
-    fun updateNote(@Body updatedNote: note): Call<note>
+    suspend fun updateNote(@Body updatedNote: note): String
 
-    @DELETE("notes/{noteId}")
-    fun deleteNote(@Path("noteId") noteId: String): Call<Void>
+//    @DELETE("notes/{noteId}")
+//    fun deleteNote(@Path("noteId") noteId: String): Call<Void>
 
     @POST("notes")
-    fun createNote(@Body newNote: note): Call<String>
+    suspend fun createNote(@Body newNote: note): String
 
-    @GET("notes/{noteId}")
-    fun getNotebyId(@Path("noteId") noteId: String): Call<note>
+//    @GET("notes/{noteId}")
+//    fun getNotebyId(@Path("noteId") noteId: String): Call<note>
 
     @POST("notes/user")
     fun getAllNotesUser(@Body user : User) : Call<List<note>>
@@ -45,7 +50,7 @@ object NoteServiceNetwork{
     private val retrofit : Retrofit by lazy{
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(NoteServiceNetwork.gson))
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 
