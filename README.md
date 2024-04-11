@@ -24,6 +24,6 @@ Technologies Used
 ![photo_2024-02-14_22-47-46](https://github.com/Ankit3002/Note-taking-app/assets/87632539/174fb1e6-ccb9-46d2-8810-0a42821db8f6)
 
 # Download the Application over here --> https://drive.google.com/file/d/11xvnocX4b4xJiLrKusMuxmMn_g4KQCnl/view?usp=sharing
-# Please use the ping command `pint https://notemanagementservice.onrender.com/api/v1/notes` or simple paste the link https://notemanagementservice.onrender.com/api/v1/notes in the browser if server doesn't respond.
+### Please use the ping command `ping https://notemanagementservice.onrender.com/api/v1/notes` or simply paste the link https://notemanagementservice.onrender.com/api/v1/notes in the browser if server doesn't respond.
 # Live app --> https://appetize.io/app/aicvubuzdnzluevoxyb5hkcxvu
 #### Make sure to have good Internet connection for accessing the Live Application.
